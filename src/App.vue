@@ -1,5 +1,6 @@
 <template>
-  <h1>뜽우영화정보</h1>
+  <Navbar />
+  <h1>영화정보</h1>
   <div v-for="(movie,i) in data" :key="i" class="item">
    <figure>
      <img :src="`${movie.imgUrl}`" :alt="movie.title">
@@ -8,49 +9,41 @@
     <h3 class="bg-yellow" :style="textRed" >{{ movie.title }}</h3>
     <p>개봉: {{movie.year}}</p>
     <p>장르: {{movie.category}}</p>
-    <button @:click="increseLike(i)">좋아요</button> <span>{{ movie.like }}</span>
- 
+    <button @:click="increseLike(i)">좋아요</button>
+    <span>{{ movie.like }}</span>
+    <p>
+      <button @click="isModal=true; selectedMovie=i">상세보기</button></p>
    </div>
- 
   </div>
- 
+  <Modal />
+
  </template>
  
  <script>
+ import data from './assets/movies';
+ import Navbar from './components/Navbar.vue';
+ import Modal from './components/Modal.vue';
+
+ console.log(data);
+
    export default {
      name: 'App',
      data(){
        return {
-         data:[
-           {
-           title: "노량",
-           year:2023,
-           category: "액션, 드라마",
-           textRed:"color: red",
-           like:0, 
-           imgUrl: require('@/assets/노량.png'), // require로 이미지 경로 처리
-          },
-          {
-           title: "아쿠아맨과 로스트 킹덤",
-           year:2023,
-           category: "액션, 판타지, 어드벤처",
-           imgUrl: require('@/assets/아쿠아맨.png'), // require로 이미지 경로 처리
-          },
-          {
-           title: "3일의 휴가",
-           year:2023,
-           category: "판타지, 드라마",
-           like:0,
-           imgUrl: require('@/assets/3일의휴가.png'), // require로 이미지 경로 처리
-          }
-         ],
+         isModal: false,
+         data: data,
+         selectedMovie: 0,
        }
      },
      methods: {
        increseLike(i){
          this.data[i].like += 1;
        }
-     }
+     },
+     components: {
+        Navbar: Navbar,
+
+      }
    }
  </script>
  
@@ -76,6 +69,7 @@
  
  button {
    margin-right:10px;
+   margin-top:1rem;
  }
  
  .item{
@@ -98,5 +92,24 @@
  .item .info {
    width: 100%;
  }
- </style>
+
+.modal {
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  left: 0; 
+  top: 0;
+  width: 100%; 
+  height: 100vh; 
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+}
+
+.modal .inner {
+  background:#fff;
+  width: 80%;
+  padding: 20px; 
+  border-radius: 10px; 
+}
+</style>
  
